@@ -31,21 +31,11 @@ Perhaps a little code snippet.
 A list of functions that can be exported.  You can delete this section
 if you don't export anything, such as for a purely object-oriented module.
 
-=head1 FUNCTIONS
-
-=head2 function1
-
 =cut
 
-sub function1 {
-}
-
-=head2 function2
-
-=cut
-
-sub function2 {
-}
+has 'type' => ( is => 'rw', isa => 'Str', );
+has 'value_name' => ( is => 'rw', isa => 'Str', );
+has 'value_data' => ( is => 'rw', isa => 'Str', );
 
 =head1 AUTHOR
 
