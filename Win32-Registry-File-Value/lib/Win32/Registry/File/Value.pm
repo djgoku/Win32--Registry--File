@@ -1,7 +1,6 @@
 package Win32::Registry::File::Value;
 
-use warnings;
-use strict;
+use Moose;
 
 =head1 NAME
 
@@ -103,5 +102,8 @@ under the same terms as Perl itself.
 
 
 =cut
+
+no Moose;
+__PACKAGE__->meta->make_immutable;
 
 1; # End of Win32::Registry::File::Value
