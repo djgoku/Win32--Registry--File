@@ -14,7 +14,6 @@ Version 0.01
 
 our $VERSION = '0.01';
 
-
 =head1 SYNOPSIS
 
 Quick summary of what the module does.
@@ -33,9 +32,43 @@ if you don't export anything, such as for a purely object-oriented module.
 
 =cut
 
-has 'type' => ( is => 'rw', isa => 'Str', );
+has 'type' =>
+  ( is => 'rw', isa => 'Str', reader => 'get_type', writer => 'set_type' );
 has 'value_name' => ( is => 'rw', isa => 'Str', );
 has 'value_data' => ( is => 'rw', isa => 'Str', );
+
+=head1 FUNCTIONS
+
+=head2 check_type
+
+=cut
+
+sub check_type {
+    my $self = shift;
+    if (   $self->get_type eq 'REG_SZ'
+        || $self->get_type eq 'REG_BINARY'
+        || $self->get_type eq 'REG_DWORD'
+        || $self->get_type eq 'REG_EXPAND_SZ'
+        || $self->get_type eq 'REG_MULTI_SZ' )
+    {
+        return 1;
+    }
+    return 0;
+}
+
+=head2 check_value_name
+
+=cut
+
+sub check_value_name {
+}
+
+=head2 check_value_data
+
+=cut
+
+sub check_value_data {
+}
 
 =head1 AUTHOR
 
@@ -96,4 +129,4 @@ under the same terms as Perl itself.
 no Moose;
 __PACKAGE__->meta->make_immutable;
 
-1; # End of Win32::Registry::File::Value
+1;    # End of Win32::Registry::File::Value
