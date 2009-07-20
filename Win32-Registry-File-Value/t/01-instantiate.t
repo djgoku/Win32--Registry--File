@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 16;
+use Test::More tests => 18;
 use Test::Exception;
 
 use Win32::Registry::File::Value;
@@ -26,26 +26,28 @@ lives_ok {
 }
 'Successfully created a Win32::R::F::V object';
 is( $value2->get_type,   'REG_SZ',    '...got the right type' );
-is( $value2->value_name, 'ValueName', '...got the right value_name' );
-is( $value2->value_data, 'ValueData', '...got the right value_data' );
+is( $value2->get_value_name, 'ValueName', '...got the right value_name' );
+is( $value2->get_value_data, 'ValueData', '...got the right value_data' );
 
 can_ok( $value2, qw/check_type check_value_name check_value_data/ );
 
-is( $value2->check_type( $value2->get_type ),
-    1, 'checking for REG_SZ value type' );
+# Testing check_type()
+is( $value2->check_type( $value2->get_type ), 1, 'REG_SZ is a valid value type' );
 $value2->set_type('REG_BINARY');
 is( $value2->get_type, 'REG_BINARY', 'we are able to set_type()' );
-is( $value2->check_type( $value2->get_type ),
-    1, 'checking for REG_BINARY value type' );
+is( $value2->check_type( $value2->get_type ), 1, 'REG_BINARY is a valid value type' );
 $value2->set_type('REG_DWORD');
-is( $value2->check_type( $value2->get_type ),
-    1, 'checking for REG_DWORD value type' );
+is( $value2->check_type( $value2->get_type ), 1, 'REG_DWORD is a valid value type' );
 $value2->set_type('REG_EXPAND_SZ');
-is( $value2->check_type( $value2->get_type ),
-    1, 'checking for REG_EXPAND_SZ value type' );
+is( $value2->check_type( $value2->get_type ), 1, 'REG_EXPAND_SZ is a valid value type' );
 $value2->set_type('REG_MULTI_SZ');
-is( $value2->check_type( $value2->get_type ),
-    1, 'checking for REG_MULTI_SZ value type' );
+is( $value2->check_type( $value2->get_type ), 1, 'REG_MULTI_SZ is a valid value type' );
 $value2->set_type('FAIL');
-is( $value2->check_type( $value2->get_type ),
-    0, 'checking for a FAIL value type' );
+is( $value2->check_type( $value2->get_type ), 0, 'FAIL is an invalid value type' );
+
+# Testing check_value_name()
+my $long_string = '_perl' x 51; # 5 * 51 = 255
+$value2->set_value_name($long_string);
+is( $value2->check_value_name( $value2->get_value_name ), 1, 'Value name is set to max characters allowed' );
+$value2->set_value_name($long_string . 'F');
+is( $value2->check_value_name( $value2->get_value_name ), 0, 'Value name exceeds max characters allowed' );
