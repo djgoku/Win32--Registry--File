@@ -46,7 +46,7 @@ $value2->set_type('FAIL');
 is( $value2->check_type( $value2->get_type ), 0, 'FAIL is an invalid value type' );
 
 # Testing check_value_name()
-my $long_string = '_perl' x 51; # 5 * 51 = 255
+my $long_string = '_perl' x 51; # 5 * 51 = 255 is the max allow size for value_name
 $value2->set_value_name($long_string);
 is( $value2->check_value_name( $value2->get_value_name ), 1, 'Value name is set to max characters allowed' );
 $value2->set_value_name($long_string . 'F');
