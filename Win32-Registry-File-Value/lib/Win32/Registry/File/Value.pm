@@ -32,10 +32,24 @@ if you don't export anything, such as for a purely object-oriented module.
 
 =cut
 
-has 'type' =>
-  ( is => 'rw', isa => 'Str', reader => 'get_type', writer => 'set_type' );
-has 'value_name' => ( is => 'rw', isa => 'Str', );
-has 'value_data' => ( is => 'rw', isa => 'Str', );
+has 'type' => (
+    is     => 'rw',
+    isa    => 'Str',
+    reader => 'get_type',
+    writer => 'set_type'
+);
+has 'value_name' => (
+    is     => 'rw',
+    isa    => 'Str',
+    reader => 'get_value_name',
+    writer => 'set_value_name',
+);
+has 'value_data' => (
+    is     => 'rw',
+    isa    => 'Str',
+    reader => 'get_value_data',
+    writer => 'set_value_data',
+);
 
 =head1 FUNCTIONS
 
@@ -61,6 +75,11 @@ sub check_type {
 =cut
 
 sub check_value_name {
+    my $self = shift;
+    if ( length( $self->get_value_name ) <= 255 ) {
+        return 1;
+    }
+    return 0;
 }
 
 =head2 check_value_data
