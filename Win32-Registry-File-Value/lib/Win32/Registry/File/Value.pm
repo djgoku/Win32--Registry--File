@@ -53,17 +53,31 @@ has 'value_data' => (
 
 =head1 FUNCTIONS
 
+=head2 before set_type()
+
+=cut
+
+before 'set_type' => sub {
+  my ($self, $type) = @_;
+  die "Invalid type was found \'$type\' when calling set_type()" unless $self->check_type($type); 
+};
+
+before 'set_value_name' => sub {
+  my ($self, $value_name) = @_;
+  die "Invalid value name was found \'$value_name\' when calling set_value_name" unless $self->check_value_name($value_name);
+};
+
 =head2 check_type
 
 =cut
 
 sub check_type {
-    my $self = shift;
-    if (   $self->get_type eq 'REG_SZ'
-        || $self->get_type eq 'REG_BINARY'
-        || $self->get_type eq 'REG_DWORD'
-        || $self->get_type eq 'REG_EXPAND_SZ'
-        || $self->get_type eq 'REG_MULTI_SZ' )
+    my ($self, $type) = @_;
+    if (   $type eq 'REG_SZ'
+        || $type eq 'REG_BINARY'
+        || $type eq 'REG_DWORD'
+        || $type eq 'REG_EXPAND_SZ'
+        || $type eq 'REG_MULTI_SZ' )
     {
         return 1;
     }
@@ -75,8 +89,8 @@ sub check_type {
 =cut
 
 sub check_value_name {
-    my $self = shift;
-    if ( length( $self->get_value_name ) <= 255 ) {
+    my ($self, $value_name) = @_;
+    if ( length( $value_name ) <= 255 ) {
         return 1;
     }
     return 0;
