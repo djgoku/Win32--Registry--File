@@ -86,11 +86,14 @@ sub check_type {
 
 =head2 check_value_name
 
+The max value for a Value Name is 255 characters. Other than that 
+there are no limitatiosn to the characters used that I know of.
+
 =cut
 
 sub check_value_name {
     my ($self, $value_name) = @_;
-    if ( length( $value_name ) <= 255 ) {
+    if ( defined($value_name) && length( $value_name) >= 1 && length( $value_name ) <= 255 ) {
         return 1;
     }
     return 0;
@@ -101,6 +104,33 @@ sub check_value_name {
 =cut
 
 sub check_value_data {
+  my ($self, $type, $value_data) = @_;
+
+  if(defined($type) && $self->check_type($type)) {
+    if($type eq 'REG_SZ' && defined($value_data)) {
+      return 1;
+    } elsif($type eq 'REG_DWORD' && defined($value_data)) {
+      return 1 if($value_data =~ /^dword:([[:xdigit:]]{8})$/);
+      return 0;
+    } elsif($type eq 'REG_BINARY' && defined($value_data)) {
+      # trim newline
+      $value_data =~ s/\R//g;
+
+      # trim whitespace
+      $value_data =~ s/\s+//g;
+
+      if($value_data =~ /\\$/) {
+       return 0;
+      } else {
+       $value_data =~ s/\\//g;
+       $value_data .= ',' unless($value_data =~ /,$/);
+      }
+      return 1 if($value_data =~ /^hex:,$/);
+      return 1 if($value_data =~ /^hex:([[:xdigit:]]{2},)*$/);
+      return 0;
+    }
+  }
+  return 0;
 }
 
 =head1 AUTHOR
