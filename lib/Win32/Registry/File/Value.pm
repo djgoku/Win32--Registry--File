@@ -119,13 +119,13 @@ sub check_value_data {
       # trim whitespace
       $value_data =~ s/\s+//g;
 
-      if($value_data =~ /\\$/) {
-       return 0;
+      if($value_data =~ /\\$/) { # trailing backslashes are invalid
+        return 0;
       } else {
-       $value_data =~ s/\\//g;
-       $value_data .= ',' unless($value_data =~ /,$/);
+        $value_data =~ s/\\//g; # trim backslashes
+        $value_data .= ',' unless($value_data =~ /,$/); # don't add a trailing comma if there is one already present
       }
-      return 1 if($value_data =~ /^hex:,$/);
+      return 1 if($value_data =~ /^hex:,$/); # empty string
       return 1 if($value_data =~ /^hex:([[:xdigit:]]{2},)*$/);
       return 0;
     }
