@@ -125,8 +125,7 @@ sub check_value_data {
       $value_data =~ s/\\//g; # trim backslashes
       $value_data .= ',' unless($value_data =~ /,$/); # don't add a trailing comma if there is one already present
 
-      return 1 if($value_data =~ /^hex:,$/); # empty string
-      return 1 if($value_data =~ /^hex:([[:xdigit:]]{2},)*$/);
+      return 1 if($value_data =~ /^hex:([[:xdigit:]]{2},)*$/ || $value_data =~ /^hex:,$/);
       return 0;
     }
   }
