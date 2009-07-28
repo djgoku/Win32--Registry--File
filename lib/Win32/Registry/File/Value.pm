@@ -62,9 +62,22 @@ before 'set_type' => sub {
   die "Invalid type was found \'$type\' when calling set_type()" unless $self->check_type($type); 
 };
 
+=head2 before set_value_name()
+
+=cut
+
 before 'set_value_name' => sub {
   my ($self, $value_name) = @_;
   die "Invalid value name was found \'$value_name\' when calling set_value_name" unless $self->check_value_name($value_name);
+};
+
+=head2 before set_value_data()
+
+=cut
+
+before 'set_value_data' => sub {
+  my ($self, $value_data) = @_;
+  die "Invalid value data was found \'$value_data\' when calling set_value_data" unless $self->check_value_data($value_data);
 };
 
 =head2 check_type
