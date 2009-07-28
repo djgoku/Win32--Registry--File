@@ -2,7 +2,9 @@ Changes
 MANIFEST
 Makefile.PL
 README
+lib/Win32/Registry/File.pm
 lib/Win32/Registry/File/Value.pm
 t/00-load.t
+t/01-value-instantiate.t
 t/pod-coverage.t
 t/pod.t
