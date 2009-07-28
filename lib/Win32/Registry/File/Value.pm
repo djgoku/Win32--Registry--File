@@ -107,7 +107,7 @@ there are no limitatiosn to the characters used that I know of.
 
 sub check_value_name {
     my ($self, $value_name) = @_;
-    if ( defined($value_name) && length( $value_name) >= 1 && length( $value_name ) <= 255 ) {
+    if ( defined($value_name) && length( $value_name) >= 2 && length( $value_name ) <= 257 && $value_name =~ /^\".*\"$/) {
         return 1;
     }
     return 0;
@@ -122,10 +122,9 @@ sub check_value_data {
 
   if(defined($type) && $self->check_type($type)) {
     if(defined($value_data) && $type eq 'REG_SZ') {
-      return 1;
+      return 1 if($value_data =~ /^\".*\"$/);
     } elsif(defined($value_data) && $type eq 'REG_DWORD') {
       return 1 if($value_data =~ /^dword:([[:xdigit:]]{8})$/);
-      return 0;
     } elsif(defined($value_data) && $type eq 'REG_BINARY') {
       # trim newline
       $value_data =~ s/\R//g;
@@ -139,7 +138,6 @@ sub check_value_data {
       $value_data .= ',' unless($value_data =~ /,$/); # don't add a trailing comma if there is one already present
 
       return 1 if($value_data =~ /^hex:([[:xdigit:]]{2},)*$/ || $value_data =~ /^hex:,$/);
-      return 0;
     }
   }
   return 0;

@@ -14,12 +14,12 @@ my $value = Win32::Registry::File::Value->new();
 
 
 # check_value_data()
-my $long_string .= 'a1~`!1@2#3$4%5^6&7*8(9)0_-+={[}]|\:;"\'<,>.?/';
+my $long_string .= "\"" . 'a1~`!1@2#3$4%5^6&7*8(9)0_-+={[}]|\:;"\'<,>.?/' . "\"";
 ok( $value->check_value_data( $long_string ) == 0, 'A type has to be passed to the subroutine' );
 ok( $value->check_value_data( '', $long_string ) == 0, 'A valid type has to be passed to the subroutine' );
 ok( $value->check_value_data( undef, $long_string ) == 0, 'A valid type has to be passed to the subroutine' );
 ok( $value->check_value_data( 'REG_SZ', undef ) == 0, 'Valid \'REG_SZ\' type passed, we making sure something is passed for the data' );
-ok( $value->check_value_data( 'REG_SZ', '\"\"' ) == 1, '\'REG_SZ\' this is the minimum data for a REG_SZ' );
+ok( $value->check_value_data( 'REG_SZ', "\"\"" ) == 1, '\'REG_SZ\' this is the minimum data for a REG_SZ' );
 ok( $value->check_value_data( 'REG_SZ', $long_string ) == 1, '\'REG_SZ\' this is somewhat large data for REG_SZ' );
 ok( $value->check_value_data( 'REG_DWORD', '\"\"' ) == 0, '\'REG_DWORD\' can not have a empty string for a data value' );
 ok( $value->check_value_data( 'REG_DWORD', 'dword:0123456' ) == 0, '\'REG_DWORD\' must have 8 hexadecimal values in the data' );
