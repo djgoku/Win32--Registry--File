@@ -73,14 +73,15 @@ before 'set_value_name' => sub {
 
 sub check_type {
     my ($self, $type) = @_;
-    if (   $type eq 'REG_SZ'
-        || $type eq 'REG_BINARY'
-        || $type eq 'REG_DWORD'
-        || $type eq 'REG_EXPAND_SZ'
-        || $type eq 'REG_MULTI_SZ' )
-    {
-        return 1;
-    }
+    my %types = (
+    REG_SZ        => 1,
+    REG_BINARY    => 1,
+    REG_DWORD     => 1,
+    REG_EXPAND_SZ => 1,
+    REG_MULTI_SZ  => 1,
+    );
+
+    return 1 if (defined($type) && exists($types{$type}));
     return 0;
 }
 
