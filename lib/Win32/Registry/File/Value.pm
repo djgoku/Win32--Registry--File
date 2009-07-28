@@ -108,24 +108,23 @@ sub check_value_data {
   my ($self, $type, $value_data) = @_;
 
   if(defined($type) && $self->check_type($type)) {
-    if($type eq 'REG_SZ' && defined($value_data)) {
+    if(defined($value_data) && $type eq 'REG_SZ') {
       return 1;
-    } elsif($type eq 'REG_DWORD' && defined($value_data)) {
+    } elsif(defined($value_data) && $type eq 'REG_DWORD') {
       return 1 if($value_data =~ /^dword:([[:xdigit:]]{8})$/);
       return 0;
-    } elsif($type eq 'REG_BINARY' && defined($value_data)) {
+    } elsif(defined($value_data) && $type eq 'REG_BINARY') {
       # trim newline
       $value_data =~ s/\R//g;
 
       # trim whitespace
       $value_data =~ s/\s+//g;
 
-      if($value_data =~ /\\$/) { # trailing backslashes are invalid
-        return 0;
-      } else {
-        $value_data =~ s/\\//g; # trim backslashes
-        $value_data .= ',' unless($value_data =~ /,$/); # don't add a trailing comma if there is one already present
-      }
+      return 0 if($value_data =~ /\\$/); # trailing backslashes are invalid
+      
+      $value_data =~ s/\\//g; # trim backslashes
+      $value_data .= ',' unless($value_data =~ /,$/); # don't add a trailing comma if there is one already present
+
       return 1 if($value_data =~ /^hex:,$/); # empty string
       return 1 if($value_data =~ /^hex:([[:xdigit:]]{2},)*$/);
       return 0;
